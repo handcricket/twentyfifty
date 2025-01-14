@@ -14,8 +14,8 @@ def check_ema_supertrend(stocks):
     results = []
     
     for stock in stocks:
-        # Fetch 1-hour historical data for the last 2 days to ensure enough data points
-        data = yf.download(stock, interval='1h', period='2d')
+        # Fetch 1-hour historical data for the last 5 days to ensure enough data points
+        data = yf.download(stock, interval='1h', period='5d')
         
         if len(data) < 50:
             continue  # Skip if not enough data
