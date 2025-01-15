@@ -4,9 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pandas = "*"
 yfinance = "*"
-ta = "*"
+pandas_ta = "*"
 telepot = "*"
 python-decouple = "*"
 
