@@ -15,8 +15,6 @@ def check_ema_supertrend(stocks):
     data = yf.download(stocks, interval='1h', period='1mo', group_by='ticker')
     
     for stock in stocks:
-        # Fetch 1-hour historical data for the last 5 days to ensure enough data points
-        # data = yf.download(stock, interval='1h', period='1mo', group_by='ticker')
 
         stockData = data[stock]
         
@@ -28,13 +26,12 @@ def check_ema_supertrend(stocks):
         supertrend = ta.supertrend(stockData['High'], stockData['Low'], stockData['Close'], length=10, multiplier=3)
 
         stockData['Supertrend'] = supertrend['SUPERTd_10_3.0']
+    
 
-        print(stockData)
-        
         # Check for EMA crossover and Supertrend condition
         if stockData['EMA20'].iloc[-1] > stockData['EMA50'].iloc[-1] and stockData['EMA20'].iloc[-2] <= stockData['EMA50'].iloc[-2]:
             if stockData['Supertrend'].iloc[-1] == 1:
-                results.append(stock)
+                results.append(f"Stock: {stock}, Price: {'{:.2f}'.format(stockData['Close'].iloc[-1])}")
     
     return results
 
@@ -83,5 +80,3 @@ if __name__ == "__main__":
 
     if len(crosses) > 0:
         send_telegram_message(msg)
-
-    # send_telegram_message(msg)
