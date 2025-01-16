@@ -11,10 +11,12 @@ API_KEY = config("API_KEY")
 
 def check_ema_supertrend(stocks):
     results = []
+
+    data = yf.download(stocks, interval='1h', period='1mo', group_by='ticker')
     
     for stock in stocks:
         # Fetch 1-hour historical data for the last 5 days to ensure enough data points
-        data = yf.download(stock, interval='1h', period='1mo', group_by='ticker')
+        # data = yf.download(stock, interval='1h', period='1mo', group_by='ticker')
 
         stockData = data[stock]
         
@@ -47,18 +49,39 @@ def send_telegram_message(msg):
 
 if __name__ == "__main__":
 
-    stocks = ["BIOCON.NS", "BAJFINANCE.NS"]
+
+    stocks = ["BIOCON.NS",
+              "BAJFINANCE.NS",
+              "BEPL.NS",
+              "BHEL.NS",
+              "MOREPENLAB.NS",
+              "RUPA.NS",
+              "GULFOILLUB.NS",
+              "GAIL.NS",
+              "FORTIS.NS",
+              "GHCLTEXTIL.NS",
+              "MARKSANS.NS",
+              "HPAL.NS",
+              "DRREDDY.NS",
+              "SUNPHARMA.NS",
+              "CIPLA.NS",
+              "SUZLON.NS",
+              "EPL.NS",
+              "CASTROLIND.NS",
+              "HSCL.NS",
+              "TATACONSUM.NS",
+              "AAATECH.NS",
+              "NYKAA.NS"]
 
     crosses = check_ema_supertrend(stocks)
 
     crossesString =  "\n".join(crosses)
-    stocksString =  "\n".join(stocks)
 
-    msg = f"Crosses: \n{crossesString} on {stocksString}"
+    msg = f"Crosses: \n{crossesString}"
 
     print(msg)
 
-    # if len(crosses) > 0:
-    #     send_telegram_message(msg)
+    if len(crosses) > 0:
+        send_telegram_message(msg)
 
-    send_telegram_message(msg)
+    # send_telegram_message(msg)
