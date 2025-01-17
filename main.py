@@ -9,28 +9,49 @@ MY_ID = config("MY_ID")
 API_KEY = config("API_KEY")
 
 
-def check_ema_supertrend(stocks):
+# def check_ema_supertrend(stocks):
+#     results = []
+
+#     data = yf.download(stocks, interval='1h', period='1mo', group_by='ticker')
+    
+#     for stock in stocks:
+
+#         stockData = data[stock]
+        
+#         # Calculate EMA(20) and EMA(50)
+#         stockData['EMA20'] = ta.ema(stockData['Close'], length=20, offset=0)
+#         stockData['EMA50'] = ta.ema(stockData['Close'], length=50, offset=0)
+        
+#         # Calculate Supertrend (7,3)
+#         supertrend = ta.supertrend(stockData['High'], stockData['Low'], stockData['Close'], length=10, multiplier=3)
+
+#         stockData['Supertrend'] = supertrend['SUPERTd_10_3.0']
+    
+
+#         # Check for EMA crossover and Supertrend condition
+#         if stockData['EMA20'].iloc[-1] > stockData['EMA50'].iloc[-1] and stockData['EMA20'].iloc[-2] <= stockData['EMA50'].iloc[-2]:
+#             if stockData['Supertrend'].iloc[-1] == 1:
+#                 results.append(f"Stock: {stock}, Price: {'{:.2f}'.format(stockData['Close'].iloc[-1])}")
+    
+#     return results
+
+def check_supertrend(stocks):
     results = []
 
     data = yf.download(stocks, interval='1h', period='1mo', group_by='ticker')
     
     for stock in stocks:
 
-        stockData = data[stock]
+        stockData = data[stock].copy()
         
-        # Calculate EMA(20) and EMA(50)
-        stockData['EMA20'] = ta.ema(stockData['Close'], length=20, offset=0)
-        stockData['EMA50'] = ta.ema(stockData['Close'], length=50, offset=0)
-        
-        # Calculate Supertrend (7,3)
+        # Calculate Supertrend (10,3)
         supertrend = ta.supertrend(stockData['High'], stockData['Low'], stockData['Close'], length=10, multiplier=3)
 
         stockData['Supertrend'] = supertrend['SUPERTd_10_3.0']
     
 
-        # Check for EMA crossover and Supertrend condition
-        if stockData['EMA20'].iloc[-1] > stockData['EMA50'].iloc[-1] and stockData['EMA20'].iloc[-2] <= stockData['EMA50'].iloc[-2]:
-            if stockData['Supertrend'].iloc[-1] == 1:
+        # Check for Supertrend crossover
+        if stockData['Supertrend'].iloc[-1] == 1 and stockData['Supertrend'].iloc[-2] == -1:
                 results.append(f"Stock: {stock}, Price: {'{:.2f}'.format(stockData['Close'].iloc[-1])}")
     
     return results
@@ -47,8 +68,7 @@ def send_telegram_message(msg):
 if __name__ == "__main__":
 
 
-    stocks = ["BIOCON.NS",
-              "BAJFINANCE.NS",
+    stocks = [
               "BEPL.NS",
               "BHEL.NS",
               "MOREPENLAB.NS",
@@ -65,12 +85,19 @@ if __name__ == "__main__":
               "SUZLON.NS",
               "EPL.NS",
               "CASTROLIND.NS",
-              "HSCL.NS",
               "TATACONSUM.NS",
               "AAATECH.NS",
-              "NYKAA.NS"]
+              "SIEMENS.NS",
+              "ASIANPAINT.NS",
+              "NESTLEIND.NS",
+              "TRENT.NS",
+              "ULTRACEMCO.NS",
+              "HINDUNILVR.NS",
+              "APOLLOHOSP.NS",
+              "BRITANNIA.NS",]
 
-    crosses = check_ema_supertrend(stocks)
+    # crosses = check_ema_supertrend(stocks)
+    crosses = check_supertrend(stocks)
 
     crossesString =  "\n".join(crosses)
 
