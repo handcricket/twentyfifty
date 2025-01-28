@@ -82,7 +82,16 @@ def check_trend(stocks):
         stockData['pc_s2'] = pc_s2
 
         # check price crossover pc_s2
-        if (stockData['Close'].iloc[-2] < stockData['pc_s2'].iloc[-2]) and (stockData['Close'].iloc[-1] > stockData['pc_s2'].iloc[-1]):
+        # if the signals are less, the use the below code => this will consider only latest pc_s2
+        # if (stockData['Close'].iloc[-2] < stockData['pc_s2'].iloc[-1]) and (stockData['Close'].iloc[-1] > stockData['pc_s2'].iloc[-1]):
+        #     results.append(f"Stock: {stock}, Price: {'{:.2f}'.format(stockData['Close'].iloc[-1])}")
+
+        # check price crossover pc_s2
+        # if (stockData['Close'].iloc[-2] < stockData['pc_s2'].iloc[-2]) and (stockData['Close'].iloc[-1] > stockData['pc_s2'].iloc[-1]):
+        #     results.append(f"Stock: {stock}, Price: {'{:.2f}'.format(stockData['Close'].iloc[-1])}")
+
+        # check price crossover pc_s2
+        if (stockData['Low'].iloc[-1] < stockData['pc_s2'].iloc[-1]) and (stockData['Close'].iloc[-1] > stockData['pc_s2'].iloc[-1]):
             results.append(f"Stock: {stock}, Price: {'{:.2f}'.format(stockData['Close'].iloc[-1])}")
     
     return results
