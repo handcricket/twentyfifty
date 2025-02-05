@@ -133,7 +133,8 @@ if __name__ == "__main__":
               "HINDUNILVR.NS",
               "APOLLOHOSP.NS",
               "BRITANNIA.NS",
-              "VOLTAS.NS"
+              "VOLTAS.NS",
+              "LLOYDSENGG.NS"
               ]
 
     crosses = check_trend(stocks)
